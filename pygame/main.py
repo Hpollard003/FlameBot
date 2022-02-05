@@ -7,8 +7,9 @@ pygame.display.set_caption("Basic")
 
 clock = pygame.time.Clock()
 
-test_surface = pygame.Surface((100,200))
-test_surface.fill("cyan")
+bg_surface = pygame.image.load('graphics/background.png')
+ground_surface = pygame.image.load('graphics/ground.png')
+
 
 while True: 
     for event in pygame.event.get():
@@ -16,7 +17,8 @@ while True:
             pygame.quit()
             exit()
     
-    screen.blit(test_surface, (400,200))        
+    screen.blit(bg_surface, (0,0))
+    screen.blit(ground_surface, (0,300))        
     
     pygame.display.update()
     clock.tick(60)
