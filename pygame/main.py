@@ -12,6 +12,9 @@ bg_surface = pygame.image.load('graphics/background.png')
 ground_surface = pygame.image.load('graphics/ground.png')
 text_surface = pixel_font.render("My Game", False, "cyan")
 
+enemy_surface = pygame.image.load('graphics/enemy/enemy1.png')
+enemy_x_pos = 600
+
 while True: 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -20,7 +23,10 @@ while True:
     
     screen.blit(bg_surface, (0,0))
     screen.blit(ground_surface, (0,300)) 
-    screen.blit(text_surface, (230, 10))       
+    screen.blit(text_surface, (230, 10))    
+    enemy_x_pos -= 4
+    if enemy_x_pos < -100: enemy_x_pos = 800
+    screen.blit(enemy_surface, (enemy_x_pos, 250))   
     
     pygame.display.update()
     clock.tick(60)
