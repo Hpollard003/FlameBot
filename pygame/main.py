@@ -31,6 +31,8 @@ enemy_surf = pygame.image.load('graphics/enemy/enemy1.png').convert_alpha()
 enemy_rect = enemy_surf.get_rect(midbottom = (600 , 310))
 
 # Player attributes
+player_idle = pygame.image.load('graphics/player/player.png')
+player_idle_rect = player_idle.get_rect(midbottom = (80, 310))
 player_surf = pygame.image.load('graphics/Player/Robot_Walk1_v1.png').convert_alpha()
 player_rect = player_surf.get_rect(midbottom = (80,310))
 player_gravity = 0
@@ -85,8 +87,12 @@ while True:
         player_gravity += 1
         player_rect.y += player_gravity
         if player_rect.bottom >= 310: player_rect.bottom = 310
-        screen.blit(player_surf, player_rect)
-        
+        # screen.blit(player_surf, player_rect)
+        if player_rect.bottom == 310: 
+            screen.blit(player_idle, player_idle_rect)
+        else:
+            screen.blit(player_surf, player_rect)
+            
         # GameOver Collision
         if enemy_rect.colliderect(player_rect):
             game_active = False
