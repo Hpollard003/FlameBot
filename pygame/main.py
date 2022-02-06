@@ -100,7 +100,7 @@ clock = pygame.time.Clock()
 pixel_font = pygame.font.Font("font/Pixeltype.ttf", 50)
 game_active = False
 start_time = 0
-score = 0
+score = 999
 
 
 #groups
