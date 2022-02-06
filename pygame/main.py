@@ -93,7 +93,7 @@ player_rect = player_surf.get_rect(midbottom = (80,310))
 player_gravity = 0
 
 # Intro Robot
-player_stand = pygame.image.load('graphics/Player/player.png').convert_alpha()
+player_stand = pygame.image.load('graphics/enemy/Blue/blue1.png').convert_alpha()
 player_stand = pygame.transform.rotozoom(player_stand,0,3)
 player_stand_rect = player_stand.get_rect(center = (400,200))
 
@@ -101,6 +101,9 @@ player_stand_rect = player_stand.get_rect(center = (400,200))
 intro_text_surf = pixel_font.render("FlameBOT", False, "orange")
 intro_text_rect = intro_text_surf.get_rect(center = (400, 50))
 
+# Game Over
+go_text_surf = pixel_font.render("You Died", False, "Red")
+go_text_rect = intro_text_surf.get_rect(center = (400, 50))
 
 # How to Start Game
 start_text_surf = pixel_font.render("PRESS  SPACE  TO  RUN", False, "orange")
@@ -187,11 +190,12 @@ while True:
         
         score_message = pixel_font.render(f'Your Score: {score}' , False, 'orange')
         score_message_rect = score_message.get_rect(center = (400,340))
-        screen.blit(intro_text_surf, intro_text_rect)
         
         if score == 0:
+            screen.blit(intro_text_surf, intro_text_rect)
             screen.blit(start_text_surf, start_text_rect)
         else: 
+            screen.blit(go_text_surf, go_text_rect)
             screen.blit(score_message, score_message_rect)
     
 
