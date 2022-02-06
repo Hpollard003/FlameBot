@@ -31,6 +31,17 @@ def collision(player, obstacles):
         for obstacle_rect in obstacles:
             if player.colliderect(obstacle_rect): return False
     return True
+
+def player_animation():
+    global player_surf, player_index
+    
+    if player_rect.bottom < 310:
+        player_surf = player_jump
+    else:
+        player_index += 0.05
+        if player_index >= len(player_walk): player_index = 0
+        player_surf = player_walk[int(player_index)]
+    
     
 
 # Initializing and window settings
@@ -47,20 +58,37 @@ score = 0
 
 # Bg and Floor attributes
 bg_surface = pygame.image.load('graphics/background.png').convert()
-ground_surface = pygame.image.load('graphics/ground.png').convert()
+ground_surface = pygame.image.load('graphics/ground1.png').convert_alpha()
+ground_rect = ground_surface.get_rect(bottomleft = (0,470))
 
 # Enemy1 attributes
-enemy_surf = pygame.image.load('graphics/enemy/Red/red1.png').convert_alpha()
+enemy_frame_1 = pygame.image.load('graphics/enemy/Red/red1.png').convert_alpha()
+enemy_frame_2 = pygame.image.load('graphics/enemy/Red/red2.png').convert_alpha()
+enemy_frame_3 = pygame.image.load('graphics/enemy/Red/red3.png').convert_alpha()
+enemy_frame_4 = pygame.image.load('graphics/enemy/Red/red4.png').convert_alpha()
+enemy_frames = [enemy_frame_1, enemy_frame_2, enemy_frame_3, enemy_frame_4]
+enemy_index = 0
+enemy_surf = enemy_frames[enemy_index]
+
 # Enemy2 attributes
-flying_enemy_surf = pygame.image.load('graphics/enemy/Blue/blue1.png').convert_alpha()
+flying_enemy_frame_1 = pygame.image.load('graphics/enemy/Blue/blue1.png').convert_alpha()
+flying_enemy_frame_2 = pygame.image.load('graphics/enemy/Blue/blue2.png').convert_alpha()
+flying_enemy_frame_3 = pygame.image.load('graphics/enemy/Blue/blue3.png').convert_alpha()
+flying_enemy_frame_4 = pygame.image.load('graphics/enemy/Blue/blue4.png').convert_alpha()
+flying_enemy_frames = [flying_enemy_frame_1, flying_enemy_frame_2, flying_enemy_frame_3, flying_enemy_frame_4]
+flying_enemy_index = 0
+flying_enemy_surf = flying_enemy_frames[flying_enemy_index]
 
-
+# Obstacle Rectangle List
 obstacle_rect_list = []
 
 # Player attributes
-player_idle = pygame.image.load('graphics/player/walk.png')
-player_idle_rect = player_idle.get_rect(midbottom = (80, 310))
-player_surf = pygame.image.load('graphics/Player/jump.png').convert_alpha()
+player_walk_1 = pygame.image.load('graphics/player/walk.png').convert_alpha()
+player_walk_2 = pygame.image.load('graphics/player/walk1.png').convert_alpha()
+player_walk = [player_walk_1, player_walk_2]
+player_index = 0
+player_jump = pygame.image.load('graphics/Player/jump.png').convert_alpha()
+player_surf = player_walk[player_index]
 player_rect = player_surf.get_rect(midbottom = (80,310))
 player_gravity = 0
 
@@ -82,6 +110,12 @@ start_text_rect = intro_text_surf.get_rect(center = (320, 340))
 obstacle_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(obstacle_timer, 1500)
 
+enemy_animation_timer = pygame.USEREVENT + 2
+pygame.time.set_timer(enemy_animation_timer , 500)
+
+flying_enemy_animation_timer = pygame.USEREVENT + 3
+pygame.time.set_timer(flying_enemy_animation_timer , 200)
+
 
 while True: 
     for event in pygame.event.get():
@@ -101,24 +135,33 @@ while True:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
                 start_time = pygame.time.get_ticks()
-        if event.type == obstacle_timer and game_active:
-            if randint(0,2):
-                obstacle_rect_list.append(enemy_surf.get_rect(midbottom = (randint(900,1100), 310)))
-            else:
-                obstacle_rect_list.append(flying_enemy_surf.get_rect(midbottom = (randint(900,1100), 200)))
-                
+        if game_active:
+            if event.type == obstacle_timer and game_active:
+                if randint(0,2):
+                    obstacle_rect_list.append(enemy_frame_1.get_rect(midbottom = (randint(900,1100), 310)))
+                else:
+                    obstacle_rect_list.append(flying_enemy_frame_1.get_rect(midbottom = (randint(900,1100), 200)))
+            if event.type == enemy_animation_timer:
+                if enemy_index == 0: enemy_index = 3
+                else: enemy_index = 0
+                enemy_surf = enemy_frames[enemy_index]
+            if event.type == flying_enemy_animation_timer:
+                if flying_enemy_index == 0: flying_enemy_index = 3
+                else: flying_enemy_index= 0
+                flying_enemy_surf = flying_enemy_frames[flying_enemy_index]
+
             
     
     if game_active:
         # Background and Floor
         screen.blit(bg_surface, (0,0))
-        screen.blit(ground_surface, (0,300)) 
         score = display_score()
 
         # # Ememy
-        # flying_enemy_rect.right -= 6
-        # if flying_enemy_rect.right < -100: flying_enemy_rect.right = 800
-        # screen.blit(flying_enemy_surf, flying_enemy_rect)   
+        ground_rect.right -= 2
+        if ground_rect.right <= 800: ground_rect.right = 1600
+        screen.blit(ground_surface, ground_rect) 
+ 
         
         # Obstacles
         obstacle_rect_list = obstacle_movement(obstacle_rect_list)
@@ -129,12 +172,9 @@ while True:
         player_gravity += 1
         player_rect.y += player_gravity
         if player_rect.bottom >= 310: player_rect.bottom = 310
-        # screen.blit(player_surf, player_rect)
-        if player_rect.bottom == 310: 
-            screen.blit(player_idle, player_idle_rect)
-        else:
-            screen.blit(player_surf, player_rect)
-            
+        player_animation()
+        screen.blit(player_surf,player_rect)
+        
         # GameOver Collision
         game_active = collision(player_rect, obstacle_rect_list)
 
