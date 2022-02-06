@@ -47,18 +47,18 @@ class Obstacle(pygame.sprite.Sprite):
         super().__init__()
         
         if type == 'red':
-            enemy_frame_1 = pygame.image.load('graphics/enemy/Red/red1.png').convert_alpha()
-            enemy_frame_2 = pygame.image.load('graphics/enemy/Red/red2.png').convert_alpha()
-            enemy_frame_3 = pygame.image.load('graphics/enemy/Red/red3.png').convert_alpha()
-            enemy_frame_4 = pygame.image.load('graphics/enemy/Red/red4.png').convert_alpha()
-            self.frames = [enemy_frame_1, enemy_frame_2, enemy_frame_3, enemy_frame_4]
-            y_pos = 310
-        else:
             flying_enemy_frame_1 = pygame.image.load('graphics/enemy/Blue/blue1.png').convert_alpha()
             flying_enemy_frame_2 = pygame.image.load('graphics/enemy/Blue/blue2.png').convert_alpha()
             flying_enemy_frame_3 = pygame.image.load('graphics/enemy/Blue/blue3.png').convert_alpha()
             flying_enemy_frame_4 = pygame.image.load('graphics/enemy/Blue/blue4.png').convert_alpha()
             self.frames = [flying_enemy_frame_1, flying_enemy_frame_2, flying_enemy_frame_3, flying_enemy_frame_4]
+            y_pos = 310
+        else:
+            enemy_frame_1 = pygame.image.load('graphics/enemy/Red/red1.png').convert_alpha()
+            enemy_frame_2 = pygame.image.load('graphics/enemy/Red/red2.png').convert_alpha()
+            enemy_frame_3 = pygame.image.load('graphics/enemy/Red/red3.png').convert_alpha()
+            enemy_frame_4 = pygame.image.load('graphics/enemy/Red/red4.png').convert_alpha()
+            self.frames = [enemy_frame_1, enemy_frame_2, enemy_frame_3, enemy_frame_4]
             y_pos = 200
         
         self.animation_index = 0
