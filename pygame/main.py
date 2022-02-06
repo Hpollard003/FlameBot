@@ -1,6 +1,11 @@
 import pygame
 from sys import exit
 
+
+def score():
+    current_time = pygame.time.get_ticks()
+    print(current_time)
+
 # Initializing and window settings
 pygame.init()
 screen = pygame.display.set_mode((800,400))
@@ -34,35 +39,41 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-            
-        # User Inputs
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and player_rect.bottom == 310:
-                player_gravity = -20
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if player_rect.collidepoint(event.pos) and player_rect.bottom == 310:
-                player_gravity = -20
+        if game_active:       
+            # User Inputs
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and player_rect.bottom == 310:
+                    player_gravity = -23
+                
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if player_rect.collidepoint(event.pos) and player_rect.bottom == 310:
+                    player_gravity = -23
+        else:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                game_active = True
+                enemy_rect.left = 800
     
-    # Background and Floor
-    screen.blit(bg_surface, (0,0))
-    screen.blit(ground_surface, (0,300)) 
+    if game_active:
+        # Background and Floor
+        screen.blit(bg_surface, (0,0))
+        screen.blit(ground_surface, (0,300)) 
 
-    # Ememy
-    enemy_rect.right -= 3
-    if enemy_rect.right < -100: enemy_rect.right = 800
-    screen.blit(enemy_surf, enemy_rect)   
+        # Ememy
+        enemy_rect.right -= 4
+        if enemy_rect.right < -100: enemy_rect.right = 800
+        screen.blit(enemy_surf, enemy_rect)   
 
-    # Player 
-    player_gravity += 1
-    player_rect.y += player_gravity
-    if player_rect.bottom >= 310: player_rect.bottom = 310
-    screen.blit(player_surf, player_rect)
-    
-    # GameOver Collision
-    if enemy_rect.colliderect(player_rect):
-        pygame.quit()
-        exit()
-    
+        # Player 
+        player_gravity += 1
+        player_rect.y += player_gravity
+        if player_rect.bottom >= 310: player_rect.bottom = 310
+        screen.blit(player_surf, player_rect)
+        
+        # GameOver Collision
+        if enemy_rect.colliderect(player_rect):
+            game_active = False
+    else: 
+        screen.fill("Red") 
     
 
     pygame.display.update()
