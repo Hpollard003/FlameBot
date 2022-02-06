@@ -50,17 +50,17 @@ bg_surface = pygame.image.load('graphics/background.png').convert()
 ground_surface = pygame.image.load('graphics/ground.png').convert()
 
 # Enemy1 attributes
-enemy_surf = pygame.image.load('graphics/enemy/enemy1.png').convert_alpha()
+enemy_surf = pygame.image.load('graphics/enemy/Red/red1.png').convert_alpha()
 # Enemy2 attributes
-flying_enemy_surf = pygame.image.load('graphics/enemy/enemy2.png').convert_alpha()
+flying_enemy_surf = pygame.image.load('graphics/enemy/Blue/blue1.png').convert_alpha()
 
 
 obstacle_rect_list = []
 
 # Player attributes
-player_idle = pygame.image.load('graphics/player/player.png')
+player_idle = pygame.image.load('graphics/player/walk.png')
 player_idle_rect = player_idle.get_rect(midbottom = (80, 310))
-player_surf = pygame.image.load('graphics/Player/Robot_Walk1_v1.png').convert_alpha()
+player_surf = pygame.image.load('graphics/Player/jump.png').convert_alpha()
 player_rect = player_surf.get_rect(midbottom = (80,310))
 player_gravity = 0
 
@@ -141,6 +141,9 @@ while True:
     else: 
         screen.fill('gray18') 
         screen.blit(player_stand, player_stand_rect)
+        obstacle_rect_list.clear()
+        player_rect.midbottom = (80 , 310)
+        player_gravity = 0
         
         score_message = pixel_font.render(f'Your Score: {score}' , False, 'orange')
         score_message_rect = score_message.get_rect(center = (400,340))
