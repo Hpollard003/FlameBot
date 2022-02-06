@@ -146,22 +146,13 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        if game_active:       
-            # User Inputs
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and player_rect.bottom == 310:
-                    player_gravity = -23
-                
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if player_rect.collidepoint(event.pos) and player_rect.bottom == 310:
-                    player_gravity = -23
+        if game_active:
+            if event.type == obstacle_timer:
+                obstacle_group.add(Obstacle(choice(['blue', 'red', 'red', 'red', 'red'])))
         else:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
                 start_time = pygame.time.get_ticks()
-        if game_active:
-            if event.type == obstacle_timer:
-                obstacle_group.add(Obstacle(choice(['blue', 'red', 'red', 'red', 'red'])))
 
 
     # Where the game renders in
@@ -188,9 +179,6 @@ while True:
         # Intro Screen & GameOver Screen
         screen.fill('gray18') 
         screen.blit(player_stand, player_stand_rect)
-        obstacle_rect_list.clear()
-        player_rect.midbottom = (80 , 310)
-        player_gravity = 0
         
         score_message = pixel_font.render(f'Your Score: {score}' , False, 'orange')
         score_message_rect = score_message.get_rect(center = (400,340))
