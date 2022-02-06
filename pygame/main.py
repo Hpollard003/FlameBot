@@ -1,6 +1,6 @@
 import pygame
 from sys import exit
-
+from random import randint
 
 # Score Card
 def display_score():
@@ -9,6 +9,29 @@ def display_score():
     score_rect = score_surf.get_rect(center = (400, 100))
     screen.blit(score_surf,score_rect)
     return current_time
+
+# Random Enemy Spawn Intervals 
+def obstacle_movement(obstacle_list):
+    if obstacle_list:
+        for obstacle_rect in obstacle_list:
+            obstacle_rect.x -= 5
+            
+            if obstacle_rect.bottom == 310: 
+                screen.blit(enemy_surf, obstacle_rect)
+            else: 
+                screen.blit(flying_enemy_surf, obstacle_rect)
+            
+        obstacle_list = [obstacle for obstacle in obstacle_list if obstacle.x > -100]
+            
+        return obstacle_list
+    else: return []
+
+def collision(player, obstacles):
+    if obstacles:
+        for obstacle_rect in obstacles:
+            if player.colliderect(obstacle_rect): return False
+    return True
+    
 
 # Initializing and window settings
 pygame.init()
@@ -26,9 +49,13 @@ score = 0
 bg_surface = pygame.image.load('graphics/background.png').convert()
 ground_surface = pygame.image.load('graphics/ground.png').convert()
 
-# Enemy attributes
+# Enemy1 attributes
 enemy_surf = pygame.image.load('graphics/enemy/enemy1.png').convert_alpha()
-enemy_rect = enemy_surf.get_rect(midbottom = (600 , 310))
+# Enemy2 attributes
+flying_enemy_surf = pygame.image.load('graphics/enemy/enemy2.png').convert_alpha()
+
+
+obstacle_rect_list = []
 
 # Player attributes
 player_idle = pygame.image.load('graphics/player/player.png')
@@ -51,6 +78,10 @@ intro_text_rect = intro_text_surf.get_rect(center = (400, 50))
 start_text_surf = pixel_font.render("PRESS  SPACE  TO  RUN", False, "orange")
 start_text_rect = intro_text_surf.get_rect(center = (320, 340))
 
+# Timer
+obstacle_timer = pygame.USEREVENT + 1
+pygame.time.set_timer(obstacle_timer, 1500)
+
 
 while True: 
     for event in pygame.event.get():
@@ -69,8 +100,14 @@ while True:
         else:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
-                enemy_rect.left = 800
                 start_time = pygame.time.get_ticks()
+        if event.type == obstacle_timer and game_active:
+            if randint(0,2):
+                obstacle_rect_list.append(enemy_surf.get_rect(midbottom = (randint(900,1100), 310)))
+            else:
+                obstacle_rect_list.append(flying_enemy_surf.get_rect(midbottom = (randint(900,1100), 200)))
+                
+            
     
     if game_active:
         # Background and Floor
@@ -78,10 +115,15 @@ while True:
         screen.blit(ground_surface, (0,300)) 
         score = display_score()
 
-        # Ememy
-        enemy_rect.right -= 6
-        if enemy_rect.right < -100: enemy_rect.right = 800
-        screen.blit(enemy_surf, enemy_rect)   
+        # # Ememy
+        # flying_enemy_rect.right -= 6
+        # if flying_enemy_rect.right < -100: flying_enemy_rect.right = 800
+        # screen.blit(flying_enemy_surf, flying_enemy_rect)   
+        
+        # Obstacles
+        obstacle_rect_list = obstacle_movement(obstacle_rect_list)
+            
+        
 
         # Player 
         player_gravity += 1
@@ -94,8 +136,8 @@ while True:
             screen.blit(player_surf, player_rect)
             
         # GameOver Collision
-        if enemy_rect.colliderect(player_rect):
-            game_active = False
+        game_active = collision(player_rect, obstacle_rect_list)
+
     else: 
         screen.fill('gray18') 
         screen.blit(player_stand, player_stand_rect)
