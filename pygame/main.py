@@ -2,9 +2,12 @@ import pygame
 from sys import exit
 
 
+# Score Card
 def score():
-    current_time = pygame.time.get_ticks()
-    print(current_time)
+    current_time = int(pygame.time.get_ticks() / 1000)
+    score_surf = pixel_font.render(f'Score: {current_time}', False, 'Cyan')
+    score_rect = score_surf.get_rect(center = (400, 100))
+    screen.blit(score_surf,score_rect)
 
 # Initializing and window settings
 pygame.init()
@@ -19,10 +22,6 @@ game_active = True
 # Bg and Floor attributes
 bg_surface = pygame.image.load('graphics/background.png').convert()
 ground_surface = pygame.image.load('graphics/ground.png').convert()
-
-# Score Card
-score_surf = pixel_font.render("RUN", True, (64,64,64))
-score_rect = score_surf.get_rect(center = (100, 100))
 
 # Enemy attributes
 enemy_surf = pygame.image.load('graphics/enemy/enemy1.png').convert_alpha()
@@ -57,6 +56,7 @@ while True:
         # Background and Floor
         screen.blit(bg_surface, (0,0))
         screen.blit(ground_surface, (0,300)) 
+        score()
 
         # Ememy
         enemy_rect.right -= 4
