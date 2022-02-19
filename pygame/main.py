@@ -59,7 +59,7 @@ class Obstacle(pygame.sprite.Sprite):
             enemy_frame_3 = pygame.image.load('graphics/enemy/Red/red3.png').convert_alpha()
             enemy_frame_4 = pygame.image.load('graphics/enemy/Red/red4.png').convert_alpha()
             self.frames = [enemy_frame_1, enemy_frame_2, enemy_frame_3, enemy_frame_4]
-            y_pos = 200
+            y_pos = 230
         
         self.animation_index = 0
         self.image = self.frames[self.animation_index]
@@ -100,7 +100,7 @@ clock = pygame.time.Clock()
 pixel_font = pygame.font.Font("font/Pixeltype.ttf", 50)
 game_active = False
 start_time = 0
-score = 999
+score = 0
 
 
 #groups
@@ -112,7 +112,7 @@ obstacle_group = pygame.sprite.Group()
 # Bg and Floor attributes
 bg_surface = pygame.image.load('graphics/background.png').convert()
 bg_music = pygame.mixer.Sound('audio/music.wav')
-bg_music.set_volume(0.6)
+bg_music.set_volume(0.1)
 bg_music.play(loops = -1)
 
 ground_surface = pygame.image.load('graphics/ground1.png').convert_alpha()
